@@ -1,4 +1,4 @@
-var oCalculator = FiniteFieldCalculatorGP(6, 3);
+var oCalculator = FiniteFieldCalculator(6, 3);
 
 // console.log("Матрица суммы:");
 // console.log(oCalculator.getConstructedFiniteFieldMatrixForOperation("+"));

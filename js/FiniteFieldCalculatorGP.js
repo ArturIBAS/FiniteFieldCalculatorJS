@@ -1,4 +1,4 @@
-function FiniteFieldCalculatorGP(p) {
+function FiniteFieldCalculator(p) {
 
     this.p = Math.floor(Number(p));
 
@@ -101,7 +101,7 @@ function FiniteFieldCalculatorGP(p) {
             return false;
 
         else
-            return this.getSumForFiniteField(iOperand1, this.inverseNumber(iOperand2));
+            return this.getProductForFiniteField(iOperand1, this.inverseNumber(iOperand2));
     }
 
     this.getPowForFiniteField = function(iNumber, iPow) {
@@ -156,7 +156,7 @@ function FiniteFieldCalculatorGP(p) {
         var p = this.p;
         if (!this.checkNumberForPresenceInField(iNumber)) return false;
         for (let i = 0; i < p; i++) {
-            if (this.getSumForFiniteField(iNumber, i) === 1) return i;
+            if (this.getProductForFiniteField(iNumber, i) === 1) return i;
         }
         return false;
     }
