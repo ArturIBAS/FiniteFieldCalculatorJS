@@ -1,11 +1,7 @@
-function FiniteFieldCalculator(p) {
+function FiniteFieldCalculator(p, m) {
 
     this.p = Math.floor(Number(p));
-
-    this.getP = function() {
-        return this.p;
-    };
-
+    this.m = Math.floor(Number(m));
 
     this.getConstructedFiniteFieldMatrixForOperation = function(sOperation) {
 
@@ -97,11 +93,13 @@ function FiniteFieldCalculator(p) {
         iOperand1 = Number(iOperand1);
         iOperand2 = Number(iOperand2);
 
-        if (!this.checkNumberForPresenceInField(iOperand1) || !this.checkNumberForPresenceInField(iOperand2))
+        if (!this.checkNumberForPresenceInField(iOperand1) || !this.checkNumberForPresenceInField(iOperand2)) {
             return false;
-
-        else
+        } else if (iOperand2 == 0) {
+            return NaN;
+        } else {
             return this.getProductForFiniteField(iOperand1, this.inverseNumber(iOperand2));
+        }
     }
 
     this.getPowForFiniteField = function(iNumber, iPow) {
