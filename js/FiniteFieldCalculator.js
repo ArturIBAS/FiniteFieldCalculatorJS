@@ -215,6 +215,7 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         return aIrreduciblesPolynomsForField;
     }
 
+    /////////////// CONSTRUCTOR ///////////////
 
     if (isNaN(this.m)) {
         aAccFiniteField = this.getElementsOfField(this.type);
@@ -254,6 +255,8 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     }
 
+    /////////////// CONSTRUCTOR ///////////////
+
 
     this.constructAndGetFiniteFieldMatrixForOperation = function(sOperation) {
 
@@ -261,32 +264,32 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         var arrayForSumOfNumber = [];
         var iAccumulate = false;
 
-        var aFieldPolynoms = this.aFiniteField;
+        var aFiniteField = this.aFiniteField;
 
-        for (let i = 0; i < aFieldPolynoms.length; i++) {
-            for (let j = 0; j < aFieldPolynoms.length; j++) {
+        for (let i = 0; i < aFiniteField.length; i++) {
+            for (let j = 0; j < aFiniteField.length; j++) {
 
                 iAccumulate = false;
 
                 switch (sOperation) {
                     case "+":
-                        iAccumulate = this.getSumForFiniteField(aFieldPolynoms[i], aFieldPolynoms[j]);
+                        iAccumulate = this.getSumForFiniteField(aFiniteField[i], aFiniteField[j]);
                         break;
                     case "-":
-                        iAccumulate = this.getDiffForFiniteField(aFieldPolynoms[i], aFieldPolynoms[j]);
+                        iAccumulate = this.getDiffForFiniteField(aFiniteField[i], aFiniteField[j]);
                         break;
                     case "*":
-                        iAccumulate = this.getMultiplicationForFiniteField(aFieldPolynoms[i], aFieldPolynoms[j]);
+                        iAccumulate = this.getMultiplicationForFiniteField(aFiniteField[i], aFiniteField[j]);
                         // console.log(i + ' и ' + j); //13 и 3
-                        // console.log(this.oPolynomialHelper.getViewForPolynom(aFieldPolynoms[i]) + ' * ' + this.oPolynomialHelper.getViewForPolynom(aFieldPolynoms[j]) + ' = ' + this.getViewForPolynom(iAccumulate))
+                        // console.log(this.oPolynomialHelper.getViewForPolynom(aFiniteField[i]) + ' * ' + this.oPolynomialHelper.getViewForPolynom(aFieldPolynoms[j]) + ' = ' + this.getViewForPolynom(iAccumulate))
                         // console.log('---');
                         break;
                     case "/":
-                        iAccumulate = this.getDivForFiniteField(aFieldPolynoms[i], aFieldPolynoms[j]);
+                        iAccumulate = this.getDivForFiniteField(aFiniteField[i], aFiniteField[j]);
                         break;
                     case "^":
                         if (this.type == "p")
-                            iAccumulate = this.getPowForFiniteField(aFieldPolynoms[i], [j]);
+                            iAccumulate = this.getPowForFiniteField(aFiniteField[i], [j]);
                         break;
                     case "v":
                         if (this.type == "p")
