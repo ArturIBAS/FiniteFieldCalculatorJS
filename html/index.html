@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Galois Field Calculator</title>
+    <title>Калькулятор Галуа</title>
     <meta charset="UTF-8">
     <meta name="author" content="Artur Buriev">
     <link href="../css/main.css" rel="stylesheet">
@@ -12,17 +12,58 @@
     <header>
         <div class="container">
             <nav>
-                <a href="javascript:void(0);" class="navbar-brand color-black">Galois Field Calculator v1</a>
+                <a href="javascript:void(0);" class="navbar-brand color-black">Калькулятор Галуа v1</a>
                 <a href="https://vk.com/ari__ari_ari" target="_blank" class="navbar-brand align-right">by Artur Buriev</a>
             </nav>
         </div>
     </header>
-    <div class="container">
-        <div class="description-block mt-50 text-center">
+    <div class="container text-center">
+        <div class="description-block mt-50">
             <h2>Как работает?</h2>
-            <p class="mt-10">Описание работы программы</p>
+            <p class="mt-10 text-left p-description">
+                Данная программа полностью реализует функционал арифметики конечных полей (полей Галуа).
+                <br>
+                Принцип работы довольно простой:
+                <br>
+                1) выберите тип поля GF(p) или GF(p^m);
+                <br>
+                2) задайте необходимые параметры поля p и m (m задается при условии, что выбран тип поля GF(p^m));
+                <br>
+                3) нажмите кнопку "Сгенерировать поле";
+                <br>
+                4) будет сгенерировано конечное поле по заданным параметрам и построены матрицы операций;
+                <br>
+                5) чтобы получить результат операции для двух элементов, доступны два поля, в которые можно ввести элементы и выбрать операцию.
+            </p>
+            <p class="mt-10 text-left p-description"><strong>P.S.</strong>
+                <br>
+                Для поля <strong>GF(p)</strong> реализованы следующие операции: сложение, умножение, деление, вычитание, возведение в степень, взятие из-под корня.
+                <br>
+                Для поля <strong>GF(p^m)</strong>: сложение, умножение, вычитание, деление.</p>
+        </div>
+        <div class="main-interface mt-100">
+            <h2>Выберите тип поля</h2>
+            <form class="form form-radio mt-50">
+                <div class="radio-container">
+                    <div class="form-item radio-btn nth-2">
+                        <input type="radio" name="type-field" id="gfp" value="gfp" checked>
+                        <label for="gfp">GF(p)</label>
+                    </div>
+                    <div class="form-item radio-btn nth-2">
+                        <input type="radio" name="type-field" id="gfpm" value="gfpm">
+                        <label for="gfpm">GF(p^m)</label>
+                    </div>
+                </div>
+            </form>
+            <form class="form mt-50">
+                <input type="number" class="parametr-field" name="p" id="p" placeholder="Введите p">
+                <input type="number" class="parametr-field d-none" name="m" id="m" placeholder="Введите m">
+            </form>
+            <br>
+            <button id="generate-btn" class="d-none">Сгенерировать поле</button>
         </div>
     </div>
+    <script src="../js/jquery.js"></script>
     <script src="../js/PermutationsWithRepetition.js"></script>
     <script src="../js/PolynomialHelper.js"></script>
     <script src="../js/FiniteFieldCalculator.js"></script>

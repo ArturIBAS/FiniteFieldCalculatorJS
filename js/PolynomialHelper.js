@@ -58,7 +58,6 @@ function PolynomialHelper() {
 
         var iDiffLenght = 0;
 
-
         if (aPolynom1.length > aPolynom2.length) {
             iDiffLenght = aPolynom1.length - aPolynom2.length;
             for (let i = 0; i < iDiffLenght; i++) {
@@ -79,7 +78,13 @@ function PolynomialHelper() {
     }
 
     this.getSumForPolynoms = function(aPolynom1, aPolynom2) { // return aPolynom1 + aPolynom2
+
+        // console.log(aPolynom1);
+        // console.log(aPolynom2);
+        // console.log('---');
+
         var arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
+
         aPolynom1 = arrayAccumulate[0];
         aPolynom2 = arrayAccumulate[1];
 
@@ -280,9 +285,6 @@ function PolynomialHelper() {
 
     this.comparePolynomialsForEquality = function(aPolynom1, aPolynom2) {
         var aDiffPolynom = this.getDiffForPolynoms(aPolynom1, aPolynom2);
-        console.log(aPolynom1);
-        console.log(aPolynom2);
-        console.log('---------');
         return this.checkPolynomByZero(aDiffPolynom);
     }
 
