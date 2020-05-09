@@ -1,4 +1,3 @@
-// TODO учесть irreduciblePolynom
 function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.generateAndGetElementsOfGpField = function(p) {
@@ -365,10 +364,6 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
         let resultOfSum;
 
-        // console.log(operand1);
-        // console.log(operand2);
-        // console.log('---');
-
         switch (this.type) {
             case "p":
                 resultOfSum = operand1 + operand2;
@@ -428,7 +423,6 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         } else if ((this.type == "p" && operand2 == 0) || (this.type == "pm" && oPolynomialHelper.checkPolynomByZero(operand2))) {
             return NaN;
         } else {
-            console.log(this.inverseNumber(operand2));
             return this.getMultiplicationForFiniteField(operand1, this.inverseNumber(operand2));
         }
     }
