@@ -201,11 +201,17 @@ $('#generate-btn').click(function() {
             alert('Некорректно введены параметры поля, пожалуйста, повторите попытку!');
             break;
         default:
-            if (p > 3 || m > 3)
-                alert('Генерация поля и построение матриц может занять некоторое время, пожалуйста, подождите!');
-            if ($('input[type=radio][name=type-field]:checked').val() == "gfpm")
+            $('#matrix-operation').empty();
+            $('#matrix-operation').append($("<h3 class='mt-50'>Идёт генерация, пожалуйста, подождите.</h3>"))
+            if ($('input[type=radio][name=type-field]:checked').val() == "gfpm") {
+                if (2 > 3 && m > 3)
+                    alert('Генерация поля и построение матриц может занять некоторое время, пожалуйста, подождите!');
                 constructFieldAndCheckCorrect(p, m);
-            else constructFieldAndCheckCorrect(p);
+            } else {
+                if (p > 25)
+                    alert('Генерация поля и построение матриц может занять некоторое время, пожалуйста, подождите!');
+                constructFieldAndCheckCorrect(p);
+            }
     }
 
 });
