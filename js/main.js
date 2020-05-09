@@ -13,9 +13,9 @@ function validateFieldParams(aParams) {
 
 function getHtmlMatrixView(oCalculator, sOperation) {
 
-    var sHtmlResult = '';
+    let sHtmlResult = '';
 
-    var sTitleOperation = 'Матрица ';
+    let sTitleOperation = 'Матрица ';
 
     switch (sOperation) {
         case "+":
@@ -38,14 +38,14 @@ function getHtmlMatrixView(oCalculator, sOperation) {
             break;
     }
 
-    var aViewsOfFieldElements = oCalculator.getViewsForField();
-    var aMatrixForView = oCalculator.getViewForMatrixOperation(sOperation);
+    let aViewsOfFieldElements = oCalculator.getViewsForField();
+    let aMatrixForView = oCalculator.getViewForMatrixOperation(sOperation);
 
 
-    var htmlTableOpen = '<table border="1">';
-    var htmlTableClose = '</table>';
+    let htmlTableOpen = '<table border="1">';
+    let htmlTableClose = '</table>';
 
-    var sViewElem = "";
+    let sViewElem = "";
 
     sHtmlResult += '<h3 class="mt-50">' + sTitleOperation + '</h3><br>'
 
@@ -83,15 +83,15 @@ function getHtmlMatrixView(oCalculator, sOperation) {
 
 function constructFieldMatrixOperationAndShow(oCalculator) {
 
-    var aOperations = ["+", "-", "*", "/"];
+    let aOperations = ["+", "-", "*", "/"];
     if (oCalculator.type == "p") {
         aOperations.push("^");
         aOperations.push("v");
     }
 
-    var sHtmlTableContainer = '';
+    let sHtmlTableContainer = '';
 
-    var elDivContainer = $('#matrix-operation');
+    let elDivContainer = $('#matrix-operation');
 
     elDivContainer.empty();
 
@@ -103,11 +103,11 @@ function constructFieldMatrixOperationAndShow(oCalculator) {
 
 function constructFieldAndCheckCorrect(p, m = NaN) {
 
-    var oCalculator = null;
-    var sFlagCorrectField = 'success';
-    var irreduciblePolynom = null;
+    let oCalculator = null;
+    let sFlagCorrectField = 'success';
+    let irreduciblePolynom = null;
 
-    var oIrreduciblePolynomsForSelect = null;
+    let oIrreduciblePolynomsForSelect = null;
 
     if (isNaN(m)) {
         oCalculator = FiniteFieldCalculator(p);
@@ -174,13 +174,13 @@ $('input.parametr-number-field').keyup(function() {
 
 $('#generate-btn').click(function() {
 
-    var oCalculator = null;
-    var p = 0;
-    var m = NaN;
+    let oCalculator = null;
+    let p = 0;
+    let m = NaN;
 
-    var aParams = [];
+    let aParams = [];
 
-    var sFlagValidateParams = '';
+    let sFlagValidateParams = '';
 
     p = Number($("#p").val());
     aParams.push(p);

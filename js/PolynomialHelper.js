@@ -1,8 +1,8 @@
 function PolynomialHelper() {
 
     this.getArrayOfPolynomialsForFiniteField = function(iMaxPolynomialDegree, aAcceptableCoefficients = []) {
-        var oPerms = PermutationsWithRepetition(aAcceptableCoefficients, iMaxPolynomialDegree);
-        var aPolynomsWithCoeffs = [];
+        let oPerms = PermutationsWithRepetition(aAcceptableCoefficients, iMaxPolynomialDegree);
+        let aPolynomsWithCoeffs = [];
         oPerms.each(function(v) { aPolynomsWithCoeffs.push(v); });
 
         aPolynomsWithCoeffs.sort(function(aPolynom1, aPolynom2) {
@@ -19,7 +19,7 @@ function PolynomialHelper() {
     }
 
     this.getArrayOfPolynomialsForFiniteFieldForView = function(aPolynomsWithCoeffs) {
-        var aPolynomsWithCoeffsForView = [];
+        let aPolynomsWithCoeffsForView = [];
         for (let i = 0; i < aPolynomsWithCoeffs.length; i++) {
             aPolynomsWithCoeffsForView[i] = this.getViewForPolynom(aPolynomsWithCoeffs[i]);
             if (aPolynomsWithCoeffsForView[i] == "") aPolynomsWithCoeffsForView[i] = "0";
@@ -28,8 +28,8 @@ function PolynomialHelper() {
     }
 
     this.getViewForPolynom = function(aPolynom) {
-        var sViewPolynom = "";
-        var sSign = "+";
+        let sViewPolynom = "";
+        let sSign = "+";
 
         if (this.checkPolynomByZero(aPolynom)) {
             if (String(aPolynom) == "NaN") return "-";
@@ -57,9 +57,9 @@ function PolynomialHelper() {
     }
 
     this.bringPolynomialsToSameOrder = function(aPolynom1, aPolynom2) {
-        var arrayWithResultPolynoms = [];
+        let arrayWithResultPolynoms = [];
 
-        var iDiffLenght = 0;
+        let iDiffLenght = 0;
 
         if (aPolynom1.length > aPolynom2.length) {
             iDiffLenght = aPolynom1.length - aPolynom2.length;
@@ -82,12 +82,12 @@ function PolynomialHelper() {
 
     this.getSumForPolynoms = function(aPolynom1, aPolynom2) { // return aPolynom1 + aPolynom2
 
-        var arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
+        let arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
 
         aPolynom1 = arrayAccumulate[0];
         aPolynom2 = arrayAccumulate[1];
 
-        var aResultPolynom = [];
+        let aResultPolynom = [];
 
         for (let i = 0; i < aPolynom1.length; i++) {
             aResultPolynom[i] = aPolynom1[i] + aPolynom2[i];
@@ -97,12 +97,12 @@ function PolynomialHelper() {
     }
 
     this.getDiffForPolynoms = function(aPolynom1, aPolynom2) { // return aPolynom1 - aPolynom2
-        var arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
+        let arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
 
         aPolynom1 = arrayAccumulate[0];
         aPolynom2 = arrayAccumulate[1];
 
-        var aResultPolynom = [];
+        let aResultPolynom = [];
 
         for (let i = 0; i < aPolynom1.length; i++) {
             aResultPolynom[i] = aPolynom1[i] - aPolynom2[i];
@@ -114,7 +114,7 @@ function PolynomialHelper() {
 
     this.giveTheDivisionModuloAndTakeTheModule = function(aPolynom1, aPolynom2) {
 
-        var aResultPolynom = this.getDivForPolynoms(aPolynom1, aPolynom2)[1];
+        let aResultPolynom = this.getDivForPolynoms(aPolynom1, aPolynom2)[1];
         aResultPolynom = this.getAbsOfPolynom(aResultPolynom);
 
         if (this.checkPolynomByZero(aResultPolynom)) return 0;
@@ -122,14 +122,14 @@ function PolynomialHelper() {
     }
 
     this.getMultiplicationForPolynoms = function(aPolynom1, aPolynom2) { // return aPolynom1*aPolynom2
-        var arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
+        let arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
         aPolynom1 = arrayAccumulate[0];
         aPolynom2 = arrayAccumulate[1];
 
         if (this.checkPolynomByZero(aPolynom2)) return NaN;
         if (this.checkPolynomByZero(aPolynom1)) return 0;
 
-        var aResultPolynom = [];
+        let aResultPolynom = [];
 
         for (let i = 0; i < aPolynom2.length; i++) {
             if (aPolynom2[i] != 0) {
@@ -137,7 +137,7 @@ function PolynomialHelper() {
             }
         }
 
-        var aResultPolynomSum = aResultPolynom.shift();
+        let aResultPolynomSum = aResultPolynom.shift();
 
         for (let i = 0; i < aResultPolynom.length; i++) {
             aResultPolynomSum = this.getSumForPolynoms(aResultPolynomSum, aResultPolynom[i]);
@@ -149,7 +149,7 @@ function PolynomialHelper() {
 
     this.getMultiplicationForPolynomByMonomial = function(aPolynom, iCoeffMonomial, iDegreeMonomial) { // return aPolynom1-aPolynom2
 
-        var aPolynomCopy = aPolynom.slice();
+        let aPolynomCopy = aPolynom.slice();
 
         for (let i = 0; i < aPolynomCopy.length; i++) {
             aPolynomCopy[i] = aPolynomCopy[i] * iCoeffMonomial;
@@ -166,21 +166,21 @@ function PolynomialHelper() {
 
         if (aPolynomResultDiv === undefined) aPolynomResultDiv = [0];
 
-        var arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
+        let arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
 
         aPolynom1 = arrayAccumulate[0];
         aPolynom2 = arrayAccumulate[1];
 
-        var aResultPolynomOfDiv = [];
+        let aResultPolynomOfDiv = [];
 
-        var arrForMultiplierForBefore = [];
+        let arrForMultiplierForBefore = [];
 
-        var iMultiplicationDeegre = 0;
-        var iMultiplicationCoeff = 0;
+        let iMultiplicationDeegre = 0;
+        let iMultiplicationCoeff = 0;
 
-        var aAccForPolynom2 = [];
+        let aAccForPolynom2 = [];
 
-        var aResultWithPolynomAndRemainder = [];
+        let aResultWithPolynomAndRemainder = [];
 
         if (this.compareDeegreePolynoms(aPolynom2, aPolynom1) || this.checkPolynomByZero(aPolynom1)) {
             aResultWithPolynomAndRemainder[0] = aPolynomResultDiv;
@@ -208,7 +208,7 @@ function PolynomialHelper() {
     }
 
     this.getSeniorDivisorAndCoeffOfSeniorForPolynom = function(aPolynom) { // aRes[0] - senior divisor, aRes[1] - coeff
-        var aRes = [];
+        let aRes = [];
         for (let i = aPolynom.length - 1; i >= 0; i--) {
             if (aPolynom[i] != 0) {
                 aRes[0] = Number(i);
@@ -221,9 +221,9 @@ function PolynomialHelper() {
 
     this.compareDeegreePolynoms = function(aPolynom1, aPolynom2) { // degree of aPolynom1 > degree of aPolynom2
 
-        var arrWithSeniorDivisorAndCoeff = [];
-        var iDegree1 = 0;
-        var iDegree2 = 0;
+        let arrWithSeniorDivisorAndCoeff = [];
+        let iDegree1 = 0;
+        let iDegree2 = 0;
 
         iDegree1 = this.getSeniorDivisorAndCoeffOfSeniorForPolynom(aPolynom1)[0];
         iDegree2 = this.getSeniorDivisorAndCoeffOfSeniorForPolynom(aPolynom2)[0];
@@ -234,18 +234,18 @@ function PolynomialHelper() {
 
     this.getMultiplierForPolynomDivisorBeforePolynomDivided = function(aPolynomDivided, aPolynomDivisor) { // return [iDegree, iCoeff]
 
-        var arrWithSeniorDivisorAndCoeff = [];
+        let arrWithSeniorDivisorAndCoeff = [];
 
         // параметры делимого aPolynom1
-        var iSeniorDegreeOfDividend = 0;
-        var iCoeffOfSeniorDegreeOfDividend = 0;
+        let iSeniorDegreeOfDividend = 0;
+        let iCoeffOfSeniorDegreeOfDividend = 0;
 
         // параметры делителя aPolynom2
-        var iSeniorDivisor = 0;
-        var iCoeffOfSeniorDivisor = 0;
+        let iSeniorDivisor = 0;
+        let iCoeffOfSeniorDivisor = 0;
 
-        var iMultiplicationDeegre = 0;
-        var iMultiplicationCoeff = 0;
+        let iMultiplicationDeegre = 0;
+        let iMultiplicationCoeff = 0;
 
         arrWithSeniorDivisorAndCoeff = this.getSeniorDivisorAndCoeffOfSeniorForPolynom(aPolynomDivided);
 
@@ -267,7 +267,7 @@ function PolynomialHelper() {
     }
 
     this.getPolynomialFromTheParametersOfTheMonomial = function(iDegree, iCoeff) {
-        var aResPolynom = new Array(iDegree + 1);
+        let aResPolynom = new Array(iDegree + 1);
         aResPolynom.fill(0);
         aResPolynom[iDegree] = iCoeff;
         return aResPolynom;
@@ -286,7 +286,7 @@ function PolynomialHelper() {
         if (Number.isInteger(aPolynom1)) aPolynom1 = [aPolynom1];
         if (Number.isInteger(aPolynom2)) aPolynom2 = [aPolynom2];
 
-        var aDiffPolynom = this.getDiffForPolynoms(aPolynom1, aPolynom2);
+        let aDiffPolynom = this.getDiffForPolynoms(aPolynom1, aPolynom2);
         return this.checkPolynomByZero(aDiffPolynom);
     }
 
@@ -300,19 +300,19 @@ function PolynomialHelper() {
     this.parsePolynom = function(sViewPolynom) {
 
         sViewPolynom = sViewPolynom.replace(/\s+/g, ''); //delete \s and \n
-        var aSplitWithMonomialsOfPolynom = sViewPolynom.split(/[-+]+/);
+        let aSplitWithMonomialsOfPolynom = sViewPolynom.split(/[-+]+/);
 
         if (aSplitWithMonomialsOfPolynom.length == 0) return false;
 
-        var iMaxDegree = 0;
+        let iMaxDegree = 0;
 
-        var aSplitForMonomialsWithCoeffAndDegree = [];
+        let aSplitForMonomialsWithCoeffAndDegree = [];
 
-        var iCoeff = 0;
+        let iCoeff = 0;
 
-        var iDegree = 0;
+        let iDegree = 0;
 
-        var oWithDegreeAndCoeffs = new Object();
+        let oWithDegreeAndCoeffs = new Object();
 
         for (let i = 0; i < aSplitWithMonomialsOfPolynom.length; i++) {
             aSplitForMonomialsWithCoeffAndDegree = aSplitWithMonomialsOfPolynom[i].split("^");
@@ -344,7 +344,7 @@ function PolynomialHelper() {
             }
         }
 
-        var aPolynom = new Array(iMaxDegree + 1);
+        let aPolynom = new Array(iMaxDegree + 1);
         aPolynom.fill(0);
 
         for (let i = 0; i < aPolynom.length; i++) {
