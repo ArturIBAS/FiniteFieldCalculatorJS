@@ -20,7 +20,7 @@ header {
 .container {
     width: 100%;
     margin: 0 auto;
-    margin-bottom: 50px;
+    margin-bottom: 150px;
 }
 
 a {
@@ -80,9 +80,51 @@ nav {
     padding: 1.2rem 1.2rem;
 }
 
+table {
+    border-collapse: collapse;
+    text-align: center;
+    border-color: #0082fe;
+}
+
+/*th,*/
+tr:first-child td:first-child {
+    background: #0082fe;
+    color: white;
+    text-align: center;
+}
+
+th,
+td {
+    text-align: center;
+    border-width: 0 1px 1px 0;
+    border-color: #0082fe;
+}
+
+td {
+    background: #fff;
+    color: #0082fe;
+    padding: 10px;
+}
+
+th:first-child,
+td:first-child {
+    text-align: center;
+}
+
+#matrix-operation table {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
 .p-description {
     padding-left: 25%;
     padding-right: 10%;
+}
+
+#matrix-operation {
+    padding-left: 15%;
+    padding-right: 15%;
 }
 
 .navbar-brand {
@@ -91,6 +133,7 @@ nav {
     line-height: inherit;
     white-space: nowrap;
 }
+
 
 .form-radio {
     padding-left: 15%;

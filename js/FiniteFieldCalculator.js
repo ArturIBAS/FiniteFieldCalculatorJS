@@ -356,14 +356,18 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2))
             return false;
 
-        else
-            return this.giveDivisionModulo(this.getSumForFieldElements(operand1, operand2));
+
+        return this.giveDivisionModulo(this.getSumForFieldElements(operand1, operand2));
 
     }
 
     this.getSumForFieldElements = function(operand1, operand2) {
 
         var resultOfSum;
+
+        // console.log(operand1);
+        // console.log(operand2);
+        // console.log('---');
 
         switch (this.type) {
             case "p":
@@ -384,8 +388,9 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2))
             return false;
 
-        else
-            return this.getSumForFiniteField(operand1, this.mutuallyInverseNumber(operand2));
+        var mutuallyInverseNumberOfOperand2 = this.mutuallyInverseNumber(operand2);
+
+        return this.getSumForFiniteField(operand1, mutuallyInverseNumberOfOperand2);
 
     }
 
@@ -394,8 +399,7 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2))
             return false;
 
-        else
-            return this.giveDivisionModulo(this.getMultiplicationForFieldElements(operand1, operand2)); //(operand1 * operand2) % p;
+        return this.giveDivisionModulo(this.getMultiplicationForFieldElements(operand1, operand2)); //(operand1 * operand2) % p;
     }
 
     this.getMultiplicationForFieldElements = function(operand1, operand2) {
@@ -419,12 +423,12 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
     this.getDivForFiniteField = function(operand1, operand2) {
 
         var oPolynomialHelper = this.oPolynomialHelper;
-
         if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2)) {
             return false;
-        } else if (operand2 == 0 || oPolynomialHelper.checkPolynomByZero(operand2)) {
+        } else if ((this.type == "p" && operand2 == 0) || (this.type == "pm" && oPolynomialHelper.checkPolynomByZero(operand2))) {
             return NaN;
         } else {
+            console.log(this.inverseNumber(operand2));
             return this.getMultiplicationForFiniteField(operand1, this.inverseNumber(operand2));
         }
     }
@@ -473,7 +477,7 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
         if (!this.checkElementForPresenceInField(operand)) return false;
         for (let i = 0; i < aFieldPolynoms.length; i++) {
-            if (Number(this.getSumForFiniteField(operand, aFieldPolynoms[i])) == 0) {
+            if ((this.type == "p" && Number(this.getSumForFiniteField(operand, aFieldPolynoms[i])) == 0) || (this.type == "pm" && this.oPolynomialHelper.comparePolynomialsForEquality(this.getSumForFiniteField(operand, aFieldPolynoms[i]), [0]))) {
                 return aFieldPolynoms[i];
             }
         }
@@ -485,9 +489,12 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         var aFieldPolynoms = this.aFiniteField;
         var oPolynomialHelper = this.oPolynomialHelper;
 
+        var aAcumPolynomForMult = [];
+
         if (!this.checkElementForPresenceInField(operand)) return false;
         for (let i = 0; i < aFieldPolynoms.length; i++) {
-            if ((this.type == "p" && this.getMultiplicationForFiniteField(operand, aFieldPolynoms[i]) == 1) || (this.type == "pm" && oPolynomialHelper.checkPolynomByZero(oPolynomialHelper.getDiffForPolynoms(this.getMultiplicationForFiniteField(operand, aFieldPolynoms[i]), [1])))) return aFieldPolynoms[i];
+            aAcumPolynomForMult = aFieldPolynoms[i];
+            if ((this.type == "p" && this.getMultiplicationForFiniteField(operand, aAcumPolynomForMult) == 1) || (this.type == "pm" && this.oPolynomialHelper.comparePolynomialsForEquality(this.getMultiplicationForFiniteField(operand, aAcumPolynomForMult), [1]))) return aAcumPolynomForMult;
         }
         return false;
     }

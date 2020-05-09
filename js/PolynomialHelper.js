@@ -31,7 +31,10 @@ function PolynomialHelper() {
         var sViewPolynom = "";
         var sSign = "+";
 
-        if (this.checkPolynomByZero(aPolynom)) return "0";
+        if (this.checkPolynomByZero(aPolynom)) {
+            if (String(aPolynom) == "NaN") return "-";
+            return "0";
+        }
 
         for (let i = aPolynom.length - 1; i >= 0; i--) {
             if (aPolynom[i] != 0) {
@@ -123,7 +126,8 @@ function PolynomialHelper() {
         aPolynom1 = arrayAccumulate[0];
         aPolynom2 = arrayAccumulate[1];
 
-        if (this.checkPolynomByZero(aPolynom1) || this.checkPolynomByZero(aPolynom2)) return 0;
+        if (this.checkPolynomByZero(aPolynom2)) return NaN;
+        if (this.checkPolynomByZero(aPolynom1)) return 0;
 
         var aResultPolynom = [];
 
@@ -182,7 +186,6 @@ function PolynomialHelper() {
             aResultWithPolynomAndRemainder[0] = aPolynomResultDiv;
             aResultWithPolynomAndRemainder[1] = aPolynom1;
             return aResultWithPolynomAndRemainder;
-
         } else {
 
             arrForMultiplierForBefore = this.getMultiplierForPolynomDivisorBeforePolynomDivided(aPolynom1, aPolynom2)
@@ -264,10 +267,6 @@ function PolynomialHelper() {
     }
 
     this.getPolynomialFromTheParametersOfTheMonomial = function(iDegree, iCoeff) {
-
-        console.log(iDegree);
-        console.log(iCoeff);
-
         var aResPolynom = new Array(iDegree + 1);
         aResPolynom.fill(0);
         aResPolynom[iDegree] = iCoeff;
@@ -283,6 +282,10 @@ function PolynomialHelper() {
     }
 
     this.comparePolynomialsForEquality = function(aPolynom1, aPolynom2) {
+
+        if (Number.isInteger(aPolynom1)) aPolynom1 = [aPolynom1];
+        if (Number.isInteger(aPolynom2)) aPolynom2 = [aPolynom2];
+
         var aDiffPolynom = this.getDiffForPolynoms(aPolynom1, aPolynom2);
         return this.checkPolynomByZero(aDiffPolynom);
     }

@@ -1,6 +1,8 @@
 // var oCalculator = FiniteFieldCalculator(2, 4, [1, 0, 0, 1, 1]);
 // var oPolynomialHelper = PolynomialHelper();
 
+// console.log(oPolynomialHelper.comparePolynomialsForEquality([0, 0, 0], [1]));
+
 // console.log('Неприводимый многочлен: ' + oPolynomialHelper.getViewForPolynom(oCalculator.irreduciblePolynom));
 
 // console.log("Матрица:");

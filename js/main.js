@@ -11,11 +11,94 @@ function validateFieldParams(aParams) {
     }
 }
 
+function getHtmlMatrixView(oCalculator, sOperation) {
+
+    var sHtmlResult = '';
+
+    var sTitleOperation = 'Матрица ';
+
+    switch (sOperation) {
+        case "+":
+            sTitleOperation += "сложения";
+            break;
+        case "-":
+            sTitleOperation += "вычитания";
+            break;
+        case "*":
+            sTitleOperation += "умножения";
+            break;
+        case "/":
+            sTitleOperation += "деления";
+            break;
+        case "^":
+            sTitleOperation += "степеней";
+            break;
+        case "v":
+            sTitleOperation += "корней";
+            break;
+    }
+
+    var aViewsOfFieldElements = oCalculator.getViewsForField();
+    var aMatrixForView = oCalculator.getViewForMatrixOperation(sOperation);
+
+
+    var htmlTableOpen = '<table border="1">';
+    var htmlTableClose = '</table>';
+
+    var sViewElem = "";
+
+    sHtmlResult += '<h3 class="mt-50">' + sTitleOperation + '</h3><br>'
+
+    sHtmlResult += htmlTableOpen;
+
+    sHtmlResult += '<tr>';
+
+    sHtmlResult += '<td>' + sOperation + '</td>';
+
+    for (let i = 0; i < aViewsOfFieldElements.length; i++) {
+        sHtmlResult += '<td>' + aViewsOfFieldElements[i] + '</td>';
+    }
+
+    sHtmlResult += '</tr>';
+
+    for (let i = 0; i < aMatrixForView.length; i++) {
+
+        sHtmlResult += '<tr>';
+
+        sHtmlResult += '<td>' + aViewsOfFieldElements[i] + '</td>';
+
+        for (let j = 0; j < aMatrixForView[i].length; j++) {
+            if (String(aMatrixForView[i][j]) == "NaN") sViewElem = "-";
+            else sViewElem = aMatrixForView[i][j];
+            sHtmlResult += '<td>' + sViewElem + '</td>';
+        }
+
+        sHtmlResult += '</tr>';
+    }
+
+    sHtmlResult += htmlTableClose;
+
+    return sHtmlResult;
+}
+
 function constructFieldMatrixOperationAndShow(oCalculator) {
-    // console.log(oCalculator.getViewForMatrixOperation("+"));
-    console.log(oCalculator.getViewForMatrixOperation("-"));
-    // console.log(oCalculator.getViewForMatrixOperation("*"));
-    // console.log(oCalculator.getViewForMatrixOperation("/"));
+
+    var aOperations = ["+", "-", "*", "/"];
+    if (oCalculator.type == "p") {
+        aOperations.push("^");
+        aOperations.push("v");
+    }
+
+    var sHtmlTableContainer = '';
+
+    var elDivContainer = $('#matrix-operation');
+
+    elDivContainer.empty();
+
+    for (let i in aOperations) {
+        sHtmlTableContainer = getHtmlMatrixView(oCalculator, aOperations[i]);
+        elDivContainer.append($(sHtmlTableContainer));
+    }
 }
 
 function constructFieldAndCheckCorrect(p, m = NaN) {
@@ -59,6 +142,7 @@ function constructFieldAndCheckCorrect(p, m = NaN) {
 
 }
 
+
 $('input[type=radio][name=type-field]').change(function() {
     if ($(this).val() == "gfpm") {
         $('#m').removeClass('d-none');
@@ -67,6 +151,11 @@ $('input[type=radio][name=type-field]').change(function() {
         $('#m').addClass('d-none');
         $("#irreduciblePolynom").addClass('d-none');
     }
+});
+
+$('#m').keyup(function() {
+    $('#irreduciblePolynom').empty();
+    $('#irreduciblePolynom').addClass('d-none');
 });
 
 $('input.parametr-number-field').keyup(function() {
