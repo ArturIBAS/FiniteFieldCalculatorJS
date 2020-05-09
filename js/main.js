@@ -201,6 +201,8 @@ $('#generate-btn').click(function() {
             alert('Некорректно введены параметры поля, пожалуйста, повторите попытку!');
             break;
         default:
+            if (p > 3 || m > 3)
+                alert('Генерация поля и построение матриц может занять некоторое время, пожалуйста, подождите!');
             if ($('input[type=radio][name=type-field]:checked').val() == "gfpm")
                 constructFieldAndCheckCorrect(p, m);
             else constructFieldAndCheckCorrect(p);
