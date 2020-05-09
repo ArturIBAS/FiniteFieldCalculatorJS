@@ -1,21 +1,6 @@
 // TODO учесть irreduciblePolynom
 function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
-    if (isNaN(p) && isNaN(m)) return 'incorrect-variables';
-
-    if (p < 2) return 'incorrect-p';
-
-    this.prefixForFieldForStorage = "galois_field";
-    this.prefixIrreduciblePolynomForFieldForStorage = this.prefixForFieldForStorage + '_' + 'irreducible_polynom';
-    this.p = Math.floor(Number(p));
-    this.m = Math.floor(Number(m));
-    this.irreduciblePolynom = irreduciblePolynom;
-    this.type = "p";
-    this.oPolynomialHelper = PolynomialHelper();
-
-    var finiteOutStorage = null;
-    var aAccFiniteField = [];
-
     this.generateAndGetElementsOfGpField = function(p) {
         var aAcceptableCoefficients = [];
         for (let i = 0; i < p; i++) {
@@ -30,20 +15,13 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         var oPolynomialHelper = this.oPolynomialHelper;
 
         var aPolynomRemainderOfDiv = [];
-        var sFlagCheckTheFieldForComplianceWithAxioms = '';
 
         for (let i = 0; i < aFieldPolynoms.length; i++) {
             aPolynomRemainderOfDiv = oPolynomialHelper.getDivForPolynoms(aFieldPolynoms[i], aPolynomForCheck);
             if (!oPolynomialHelper.checkPolynomByZero(aFieldPolynoms[i]) && oPolynomialHelper.checkPolynomByZero(aPolynomRemainderOfDiv[1])) return false;
         }
 
-        this.irreduciblePolynom = aPolynomForCheck;
-        sFlagCheckTheFieldForComplianceWithAxioms = this.checkTheFieldForComplianceWithAxioms(aFieldPolynoms);
-
-        if (sFlagCheckTheFieldForComplianceWithAxioms == 'success')
-            return true;
-        else
-            return false;
+        return true;
     }
 
     this.generateAndGetIrreduciblesPolynomialsForGp2 = function() {
@@ -179,26 +157,29 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
             aFiniteField = JSON.parse(finiteOutStorage);
         }
 
-        sFlagCheckTheFieldForComplianceWithAxioms = this.checkTheFieldForComplianceWithAxioms(aFiniteField);
 
-        if (sFlagCheckTheFieldForComplianceWithAxioms == 'success') return aFiniteField;
-
-        else return sFlagCheckTheFieldForComplianceWithAxioms;
+        return aFiniteField;
 
     }
 
-    this.checkTheFieldForComplianceWithAxioms = function(aFiniteField) {
-        var sFlagCheckFieldOnUniquenessOfZeroForSum = this.checkFieldOnUniquenessOfZero("+");
-        var sFlagCheckFieldOnUniquenessOfOneForSum = this.checkFieldOnUniquenessOfOne("+");;
+    this.checkTheFieldForComplianceWithAxioms = function() {
 
-        var sFlagCheckFieldOnUniquenessOfZeroForMult = this.checkFieldOnUniquenessOfZero("*");
-        var sFlagCheckFieldOnUniquenessOfOneForMult = this.checkFieldOnUniquenessOfOne("*");
+        if (this.type == "p") {
+            var sFlagCheckFieldOnUniquenessOfZeroForSum = this.checkFieldOnUniquenessOfZero("+");
+            var sFlagCheckFieldOnUniquenessOfZeroForMult = this.checkFieldOnUniquenessOfZero("*");
+            var sFlagCheckFieldOnUniquenessOfOneForMult = this.checkFieldOnUniquenessOfOne("*");
 
-        if (sFlagCheckFieldOnUniquenessOfZeroForSum != 'success') return sFlagCheckFieldOnUniquenessOfZeroForSum;
-        if (sFlagCheckFieldOnUniquenessOfOneForSum != 'success') return sFlagCheckFieldOnUniquenessOfZeroForSum;
-        if (sFlagCheckFieldOnUniquenessOfZeroForMult != 'success') return sFlagCheckFieldOnUniquenessOfZeroForSum;
-        if (sFlagCheckFieldOnUniquenessOfOneForMult != 'success') return sFlagCheckFieldOnUniquenessOfZeroForSum;
+            var aStringFlagsOfCheck = [];
 
+            aStringFlagsOfCheck.push(sFlagCheckFieldOnUniquenessOfZeroForSum);
+            aStringFlagsOfCheck.push(sFlagCheckFieldOnUniquenessOfZeroForMult);
+            aStringFlagsOfCheck.push(sFlagCheckFieldOnUniquenessOfOneForMult);
+
+
+            for (let index in aStringFlagsOfCheck) {
+                if (aStringFlagsOfCheck[index] !== 'success') return aStringFlagsOfCheck[index];
+            }
+        }
         return 'success';
 
     }
@@ -214,48 +195,6 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         // }
         return aIrreduciblesPolynomsForField;
     }
-
-    /////////////// CONSTRUCTOR ///////////////
-
-    if (isNaN(this.m)) {
-        aAccFiniteField = this.getElementsOfField(this.type);
-        if (!Array.isArray(aAccFiniteField)) return aAccFiniteField;
-        else this.aFiniteField = aAccFiniteField;
-    } else {
-
-        if (this.m <= 1) return 'incorrect-m';
-
-        this.type = "pm";
-
-        this.aFiniteField = this.getElementsOfField(this.type);
-
-        this.aIrreduciblePolynoms = this.getIrreduciblesPolynomsForGpm();
-
-        if (this.aIrreduciblePolynoms.length == 0) return 'irreducibles-polynoms-not-found';
-
-        if (this.irreduciblePolynom === null) {
-
-            if (this.aIrreduciblePolynoms.length == 1) this.irreduciblePolynom = this.aIrreduciblePolynoms[0];
-
-            // if (this.aIrreduciblePolynoms.length > 1) return 'irreducible-polynomial-not-selected';
-
-        } else {
-
-            var bFlagCheck = false;
-
-            for (let i = 0; i < this.aIrreduciblePolynoms.length; i++) {
-                if (this.oPolynomialHelper.comparePolynomialsForEquality(this.irreduciblePolynom, this.aIrreduciblePolynoms[i])) {
-                    bFlagCheck = true;
-                    break;
-                }
-            }
-
-            if (!bFlagCheck) return 'incorrect-polynom-for-field';
-        }
-
-    }
-
-    /////////////// CONSTRUCTOR ///////////////
 
 
     this.constructAndGetFiniteFieldMatrixForOperation = function(sOperation) {
@@ -280,9 +219,6 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
                         break;
                     case "*":
                         iAccumulate = this.getMultiplicationForFiniteField(aFiniteField[i], aFiniteField[j]);
-                        // console.log(i + ' и ' + j); //13 и 3
-                        // console.log(this.oPolynomialHelper.getViewForPolynom(aFiniteField[i]) + ' * ' + this.oPolynomialHelper.getViewForPolynom(aFieldPolynoms[j]) + ' = ' + this.getViewForPolynom(iAccumulate))
-                        // console.log('---');
                         break;
                     case "/":
                         iAccumulate = this.getDivForFiniteField(aFiniteField[i], aFiniteField[j]);
@@ -537,7 +473,9 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
         if (!this.checkElementForPresenceInField(operand)) return false;
         for (let i = 0; i < aFieldPolynoms.length; i++) {
-            if (Number(this.getSumForFiniteField(operand, aFieldPolynoms[i])) == 0) return aFieldPolynoms[i];
+            if (Number(this.getSumForFiniteField(operand, aFieldPolynoms[i])) == 0) {
+                return aFieldPolynoms[i];
+            }
         }
         return false;
     }
@@ -592,7 +530,7 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
             if (iCount == 0) {
                 return 'error-not-found-mutually-inverse-element';
             } else if (iCount > 1) {
-                return 'inconsistency-with-axiom-uniqueness';
+                return 'inconsistency-with-axiom-uniqueness-zero';
             } else if (iCount == 1) {
                 continue;
             } else {
@@ -615,14 +553,13 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
                     if (Number(aMatrix[i][j]) === 1) iCount += 1;
                 }
                 if (this.type == "pm") {
-                    console.log(aMatrix[i][j]);
                     if (this.oPolynomialHelper.comparePolynomialsForEquality(aMatrix[i][j], [1])) iCount += 1;
                 }
             }
             if (iCount == 0) {
                 return 'error-not-found-inverse-element';
             } else if (iCount > 1) {
-                return 'inconsistency-with-axiom-uniqueness';
+                return 'inconsistency-with-axiom-uniqueness-one';
             } else if (iCount == 1) {
                 continue;
             } else {
@@ -633,7 +570,94 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         return 'success';
     }
 
+    this.getViewForMatrixPolynom = function(aMatrixField) {
+        for (let i = 0; i < aMatrixField.length; i++) {
+            for (let j = 0; j < aMatrixField[i].length; j++) {
+                aMatrixField[i][j] = this.oPolynomialHelper.getViewForPolynom(aMatrixField[i][j]);
+            }
+        }
+        return aMatrixField;
+    }
 
+    this.getViewForMatrixOperation = function(sOperation) {
+
+        var aMatrixField = this.getConstructedFiniteFieldMatrixForOperation(sOperation);
+
+        var aMatrixFieldView = null;
+
+        if (this.type == "p") aMatrixFieldView = aMatrixField;
+
+        if (this.type == "pm") {
+            aMatrixFieldView = this.getViewForMatrixPolynom(aMatrixField);
+        }
+
+        return aMatrixFieldView;
+
+    }
+
+    this.getArrayForSelectIrreduciblePolynom = function() {
+        aIrreduciblePolynoms = this.aIrreduciblePolynoms;
+
+        var oRes = new Object();
+
+        for (let i = 0; i < aIrreduciblePolynoms.length; i++) {
+            oRes[this.oPolynomialHelper.getViewForPolynom(aIrreduciblePolynoms[i])] = aIrreduciblePolynoms[i];
+        }
+
+        return oRes;
+    }
+
+    /////////////// CONSTRUCTOR ///////////////
+
+    if (isNaN(p) && isNaN(m)) return 'incorrect-variables';
+
+    if (p <= 1) return 'incorrect-p';
+
+    this.prefixForFieldForStorage = "galois_field";
+    this.prefixIrreduciblePolynomForFieldForStorage = this.prefixForFieldForStorage + '_' + 'irreducible_polynom';
+    this.p = Math.floor(Number(p));
+    this.m = Math.floor(Number(m));
+    this.irreduciblePolynom = irreduciblePolynom;
+    this.aIrreduciblePolynoms = [];
+    this.type = "p";
+    this.oPolynomialHelper = PolynomialHelper();
+
+    var finiteOutStorage = null;
+    var aAccFiniteField = [];
+
+    if (isNaN(this.m)) {
+        aAccFiniteField = this.getElementsOfField(this.type);
+        if (!Array.isArray(aAccFiniteField)) return aAccFiniteField;
+        else this.aFiniteField = aAccFiniteField;
+    } else {
+
+        if (this.m <= 1) return 'incorrect-m';
+
+        this.type = "pm";
+
+        this.aFiniteField = this.getElementsOfField(this.type);
+
+        this.aIrreduciblePolynoms = this.getIrreduciblesPolynomsForGpm();
+
+        if (this.aIrreduciblePolynoms.length == 0) return 'irreducibles-polynoms-not-found';
+
+        if (this.irreduciblePolynom !== null) {
+
+            var bFlagCheck = false;
+
+            for (let i = 0; i < this.aIrreduciblePolynoms.length; i++) {
+                if (this.oPolynomialHelper.comparePolynomialsForEquality(this.irreduciblePolynom, this.aIrreduciblePolynoms[i])) {
+                    bFlagCheck = true;
+                    break;
+                }
+            }
+
+            if (!bFlagCheck) return 'incorrect-polynom-for-field';
+        }
+
+    }
+
+    /////////////// CONSTRUCTOR ///////////////
 
     return this;
 

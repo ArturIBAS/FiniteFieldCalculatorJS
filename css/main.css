@@ -37,13 +37,18 @@ p {
     font-size: 1rem;
 }
 
-input[type=number] {
+.parametr-field {
     border: 2px solid #0082fe;
     border-radius: 20px;
     width: calc(25% - 1.5px);
     height: 35px;
     padding-left: 10px;
     font-size: 90%;
+    background: #fff !important;
+}
+
+select option {
+    background-color: #fff;
 }
 
 ::placeholder {
@@ -236,7 +241,7 @@ nav {
         padding-left: 10%;
     }
 
-    input[type=number] {
+    .parametr-field {
         margin-top: 10px;
         width: calc(70% - 1.5px);
     }

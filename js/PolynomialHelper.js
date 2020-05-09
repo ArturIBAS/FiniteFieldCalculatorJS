@@ -79,10 +79,6 @@ function PolynomialHelper() {
 
     this.getSumForPolynoms = function(aPolynom1, aPolynom2) { // return aPolynom1 + aPolynom2
 
-        // console.log(aPolynom1);
-        // console.log(aPolynom2);
-        // console.log('---');
-
         var arrayAccumulate = this.bringPolynomialsToSameOrder(aPolynom1, aPolynom2);
 
         aPolynom1 = arrayAccumulate[0];
@@ -268,6 +264,9 @@ function PolynomialHelper() {
     }
 
     this.getPolynomialFromTheParametersOfTheMonomial = function(iDegree, iCoeff) {
+
+        console.log(iDegree);
+        console.log(iCoeff);
 
         var aResPolynom = new Array(iDegree + 1);
         aResPolynom.fill(0);
