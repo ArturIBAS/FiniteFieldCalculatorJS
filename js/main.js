@@ -120,6 +120,7 @@ function constructFieldAndCheckCorrect(p, m = NaN) {
             for (let sPolynomView in oIrreduciblePolynomsForSelect) {
                 $('#irreduciblePolynom').append('<option value="' + JSON.stringify(oIrreduciblePolynomsForSelect[sPolynomView]) + '">' + sPolynomView + '</option>');
             }
+            $('#matrix-operation').empty();
             alert('Пожалуйста, выберите один из неприводимых многочленов!');
             $("#irreduciblePolynom").removeClass('d-none');
             return false;
