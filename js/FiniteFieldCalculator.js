@@ -1,3 +1,7 @@
+//by Artur Buried
+//email: arturburiev@yandex.ru
+//good lack!
+
 function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.generateAndGetElementsOfGpField = function(p) {
@@ -10,14 +14,11 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.checkThePolynomialForIrreducibilityWithRespectToTheField = function(aPolynomForCheck) {
 
-        let aFieldPolynoms = this.aFiniteField;
-        let oPolynomialHelper = this.oPolynomialHelper;
-
         let aPolynomRemainderOfDiv = [];
 
-        for (let i = 0; i < aFieldPolynoms.length; i++) {
-            aPolynomRemainderOfDiv = oPolynomialHelper.getDivForPolynoms(aFieldPolynoms[i], aPolynomForCheck);
-            if (!oPolynomialHelper.checkPolynomByZero(aFieldPolynoms[i]) && oPolynomialHelper.checkPolynomByZero(aPolynomRemainderOfDiv[1])) return false;
+        for (let i = 0; i < this.aFiniteField.length; i++) {
+            aPolynomRemainderOfDiv = this.oPolynomialHelper.getDivForPolynoms(this.aFiniteField[i], aPolynomForCheck);
+            if (!this.oPolynomialHelper.checkPolynomByZero(this.aFiniteField[i]) && this.oPolynomialHelper.checkPolynomByZero(aPolynomRemainderOfDiv[1])) return false;
         }
 
         return true;
@@ -71,9 +72,12 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
         let aIrreduciblesPolynomsForField = [];
 
-        if (m == 2 && p >= 3 && (p % 2 == 1)) aIrreduciblesPolynomsForField = this.generateAndGetIrreduciblesPolynomialsForGp2();
+        if (this.m == 3 && (this.p == 2 || this.p == 3)) {
+            aIrreduciblesPolynomsForField.push([-1, -1, 0, 1]);
+            return aIrreduciblesPolynomsForField;
+        }
 
-        let oPolynomialHelper = this.oPolynomialHelper;
+        if (m == 2 && p >= 3 && (p % 2 == 1)) aIrreduciblesPolynomsForField = this.generateAndGetIrreduciblesPolynomialsForGp2();
 
         let aResultPolynom = [];
 
@@ -95,8 +99,8 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
         // looking for our irreducible polynomial among the polynomials of "triangles"
         for (let i = 1; i < m; i++) {
-            aAcumMonomial = oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(i, 1);
-            aAcumResultPolynom = oPolynomialHelper.getSumForPolynoms(aAcumMonomial, aMainPartOfResultPolynom);
+            aAcumMonomial = this.oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(i, 1);
+            aAcumResultPolynom = this.oPolynomialHelper.getSumForPolynoms(aAcumMonomial, aMainPartOfResultPolynom);
             if (this.checkThePolynomialForIrreducibilityWithRespectToTheField(aAcumResultPolynom)) {
                 aIrreduciblesPolynomsForField.push(aAcumResultPolynom);
             }
@@ -112,9 +116,9 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
                 iDegree_2 = iDegree + 1;
                 iDegree_3 = iDegree_2 + 1;
                 if (iDegree < m && iDegree_2 < m && iDegree_3 < m) {
-                    aAcumMonomial = oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(iDegree, 1);
-                    aAcumMonomial_2 = oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(iDegree_2, 1);
-                    aAcumMonomial_3 = oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(iDegree_3, 1);
+                    aAcumMonomial = this.oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(iDegree, 1);
+                    aAcumMonomial_2 = this.oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(iDegree_2, 1);
+                    aAcumMonomial_3 = this.oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(iDegree_3, 1);
 
                     aAcumResultPolynom = this.getSumForPolynoms(this.getSumForPolynoms(this.getSumForPolynoms(aAcumMonomial, aAcumMonomial_2), aAcumMonomial_3), aMainPartOfResultPolynom);
 
@@ -202,29 +206,34 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         let arrayForSumOfNumber = [];
         let iAccumulate = false;
 
-        let aFiniteField = this.aFiniteField;
+        console.log('--------- Operation: ' + sOperation + ' ----------------')
 
-        for (let i = 0; i < aFiniteField.length; i++) {
-            for (let j = 0; j < aFiniteField.length; j++) {
+        let inc = 0;
+
+        for (let i = 0; i < this.aFiniteField.length; i++) {
+            for (let j = 0; j < this.aFiniteField.length; j++) {
 
                 iAccumulate = false;
 
+                inc += 1;
+                console.log(inc);
+
                 switch (sOperation) {
                     case "+":
-                        iAccumulate = this.getSumForFiniteField(aFiniteField[i], aFiniteField[j]);
+                        iAccumulate = this.getSumForFiniteField(this.aFiniteField[i], this.aFiniteField[j]);
                         break;
                     case "-":
-                        iAccumulate = this.getDiffForFiniteField(aFiniteField[i], aFiniteField[j]);
+                        iAccumulate = this.getDiffForFiniteField(this.aFiniteField[i], this.aFiniteField[j]);
                         break;
                     case "*":
-                        iAccumulate = this.getMultiplicationForFiniteField(aFiniteField[i], aFiniteField[j]);
+                        iAccumulate = this.getMultiplicationForFiniteField(this.aFiniteField[i], this.aFiniteField[j]);
                         break;
                     case "/":
-                        iAccumulate = this.getDivForFiniteField(aFiniteField[i], aFiniteField[j]);
+                        iAccumulate = this.getDivForFiniteField(this.aFiniteField[i], this.aFiniteField[j]);
                         break;
                     case "^":
                         if (this.type == "p")
-                            iAccumulate = this.getPowForFiniteField(aFiniteField[i], [j]);
+                            iAccumulate = this.getPowForFiniteField(this.aFiniteField[i], [j]);
                         break;
                     case "v":
                         if (this.type == "p")
@@ -242,6 +251,8 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
             aResultMatrix[i] = arrayForSumOfNumber;
             arrayForSumOfNumber = [];
         }
+
+        console.log('--------- End of operation: ' + sOperation + ' ----------------');
 
         return aResultMatrix;
 
@@ -298,10 +309,9 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.getViewsForFiniteFieldPolynoms = function() {
         let aViewsFiniteFieldPolynoms = [];
-        let aFiniteFieldPolynoms = this.aFiniteField;
 
-        for (let i = 0; i < aFiniteFieldPolynoms.length; i++) {
-            aViewsFiniteFieldPolynoms.push(this.oPolynomialHelper.getViewForPolynom(aFiniteFieldPolynoms[i]));
+        for (let i = 0; i < this.aFiniteField.length; i++) {
+            aViewsFiniteFieldPolynoms.push(this.oPolynomialHelper.getViewForPolynom(this.aFiniteField[i]));
         }
 
         return aViewsFiniteFieldPolynoms;
@@ -330,7 +340,7 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
                 resultOfDiv = operand % this.p;
                 break;
             case "pm":
-                resultOfDiv = this.deleteNonFieldMonomials(this.oPolynomialHelper.giveTheDivisionModuloAndTakeTheModule(operand, this.irreduciblePolynom));
+                resultOfDiv = this.getDivModuleForCoeffs(this.oPolynomialHelper.giveTheDivisionModuloAndTakeTheModule(operand, this.irreduciblePolynom));
                 break;
             default:
                 resultOfDiv = NaN;
@@ -339,25 +349,18 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
         return resultOfDiv;
     }
 
-    this.deleteNonFieldMonomials = function(aPolynom) {
-        let aFieldPolynoms = this.aFiniteField;
+    this.getDivModuleForCoeffs = function(aPolynom) {
+
         let aAcumMonomial = [];
-        let oPolynomialHelper = this.oPolynomialHelper;
         for (let i = 0; i < aPolynom.length; i++) {
-            aAcumMonomial = oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(i, aPolynom[i]);
-            if (!this.checkElementForPresenceInField(aAcumMonomial)) aPolynom = oPolynomialHelper.getDiffForPolynoms(aPolynom, aAcumMonomial);
+            aAcumMonomial = this.oPolynomialHelper.getPolynomialFromTheParametersOfTheMonomial(i, aPolynom[i]);
+            if (aPolynom[i] >= this.p) aPolynom[i] = aPolynom[i] % this.p;
         }
         return aPolynom;
     }
 
     this.getSumForFiniteField = function(operand1, operand2) {
-
-        if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2))
-            return false;
-
-
         return this.giveDivisionModulo(this.getSumForFieldElements(operand1, operand2));
-
     }
 
     this.getSumForFieldElements = function(operand1, operand2) {
@@ -379,21 +382,11 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
     }
 
     this.getDiffForFiniteField = function(operand1, operand2) {
-
-        if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2))
-            return false;
-
         let mutuallyInverseNumberOfOperand2 = this.mutuallyInverseNumber(operand2);
-
         return this.getSumForFiniteField(operand1, mutuallyInverseNumberOfOperand2);
-
     }
 
     this.getMultiplicationForFiniteField = function(operand1, operand2) {
-
-        if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2))
-            return false;
-
         return this.giveDivisionModulo(this.getMultiplicationForFieldElements(operand1, operand2)); //(operand1 * operand2) % p;
     }
 
@@ -417,10 +410,7 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.getDivForFiniteField = function(operand1, operand2) {
 
-        let oPolynomialHelper = this.oPolynomialHelper;
-        if (!this.checkElementForPresenceInField(operand1) || !this.checkElementForPresenceInField(operand2)) {
-            return false;
-        } else if ((this.type == "p" && operand2 == 0) || (this.type == "pm" && oPolynomialHelper.checkPolynomByZero(operand2))) {
+        if ((this.type == "p" && operand2 == 0) || (this.type == "pm" && this.oPolynomialHelper.checkPolynomByZero(operand2))) {
             return NaN;
         } else {
             return this.getMultiplicationForFiniteField(operand1, this.inverseNumber(operand2));
@@ -428,8 +418,6 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
     }
 
     this.getPowForFiniteField = function(iNumber, iPow) {
-
-        if (!this.checkElementForPresenceInField(iNumber) || !this.checkElementForPresenceInField(iPow)) return false;
 
         iNumber = Number(iNumber);
         iPow = Number(iPow);
@@ -449,8 +437,6 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.getRootForFiniteField = function(iNumber, iPow) {
 
-        if (!this.checkElementForPresenceInField(iNumber) || !this.checkElementForPresenceInField(iPow)) return false;
-
         let p = this.p;
         iNumber = Number(iNumber);
         iPow = Number(iPow);
@@ -467,12 +453,9 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.mutuallyInverseNumber = function(operand) {
 
-        let aFieldPolynoms = this.aFiniteField;
-
-        if (!this.checkElementForPresenceInField(operand)) return false;
-        for (let i = 0; i < aFieldPolynoms.length; i++) {
-            if ((this.type == "p" && Number(this.getSumForFiniteField(operand, aFieldPolynoms[i])) == 0) || (this.type == "pm" && this.oPolynomialHelper.comparePolynomialsForEquality(this.getSumForFiniteField(operand, aFieldPolynoms[i]), [0]))) {
-                return aFieldPolynoms[i];
+        for (let i = 0; i < this.aFiniteField.length; i++) {
+            if ((this.type == "p" && Number(this.getSumForFiniteField(operand, this.aFiniteField[i])) == 0) || (this.type == "pm" && this.oPolynomialHelper.comparePolynomialsForEquality(this.getSumForFiniteField(operand, this.aFiniteField[i]), [0]))) {
+                return this.aFiniteField[i];
             }
         }
         return false;
@@ -480,14 +463,10 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.inverseNumber = function(operand) {
 
-        let aFieldPolynoms = this.aFiniteField;
-        let oPolynomialHelper = this.oPolynomialHelper;
-
         let aAcumPolynomForMult = [];
 
-        if (!this.checkElementForPresenceInField(operand)) return false;
-        for (let i = 0; i < aFieldPolynoms.length; i++) {
-            aAcumPolynomForMult = aFieldPolynoms[i];
+        for (let i = 0; i < this.aFiniteField.length; i++) {
+            aAcumPolynomForMult = this.aFiniteField[i];
             if ((this.type == "p" && this.getMultiplicationForFiniteField(operand, aAcumPolynomForMult) == 1) || (this.type == "pm" && this.oPolynomialHelper.comparePolynomialsForEquality(this.getMultiplicationForFiniteField(operand, aAcumPolynomForMult), [1]))) return aAcumPolynomForMult;
         }
         return false;
@@ -495,16 +474,13 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.checkElementForPresenceInField = function(element) {
 
-        let aFiniteField = this.aFiniteField;
-        let oPolynomialHelper = this.oPolynomialHelper;
-
-        for (let i = 0; i < aFiniteField.length; i++) {
+        for (let i = 0; i < this.aFiniteField.length; i++) {
             switch (this.type) {
                 case "p":
-                    if (Number(aFiniteField[i]) == Number(element)) return true;
+                    if (Number(this.aFiniteField[i]) == Number(element)) return true;
                     break;
                 case "pm":
-                    if (oPolynomialHelper.checkPolynomByZero(oPolynomialHelper.getDiffForPolynoms(element, aFiniteField[i]))) return true;
+                    if (this.oPolynomialHelper.checkPolynomByZero(this.oPolynomialHelper.getDiffForPolynoms(element, this.aFiniteField[i]))) return true;
                     break;
                 default:
                     return false;
@@ -514,7 +490,6 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
 
     this.checkFieldOnUniquenessOfZero = function(sOperation) {
         let aMatrix = this.getConstructedFiniteFieldMatrixForOperation(sOperation);
-
 
         let iCount = 0;
         for (let i = 1; i < aMatrix.length; i++) {
@@ -529,13 +504,13 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
                 }
             }
             if (iCount == 0) {
-                return 'error-not-found-mutually-inverse-element';
+                return 'error-not-found-mutually-inverse-element' + '-' + sOperation;
             } else if (iCount > 1) {
-                return 'inconsistency-with-axiom-uniqueness-zero';
+                return 'inconsistency-with-axiom-uniqueness-zero' + '-' + sOperation;
             } else if (iCount == 1) {
                 continue;
             } else {
-                return 'error';
+                return 'error' + '-' + sOperation;
             }
         }
 
@@ -558,13 +533,13 @@ function FiniteFieldCalculator(p = NaN, m = NaN, irreduciblePolynom = null) {
                 }
             }
             if (iCount == 0) {
-                return 'error-not-found-inverse-element';
+                return 'error-not-found-inverse-element' + '-' + sOperation;
             } else if (iCount > 1) {
-                return 'inconsistency-with-axiom-uniqueness-one';
+                return 'inconsistency-with-axiom-uniqueness-one' + '-' + sOperation;
             } else if (iCount == 1) {
                 continue;
             } else {
-                return 'error';
+                return 'error' + '-' + sOperation;
             }
         }
 

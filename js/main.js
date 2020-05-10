@@ -42,8 +42,8 @@ function getHtmlMatrixView(oCalculator, sOperation) {
     let aMatrixForView = oCalculator.getViewForMatrixOperation(sOperation);
 
 
-    let htmlTableOpen = '<table border="1">';
-    let htmlTableClose = '</table>';
+    let htmlTableOpen = '<div class="big-table"><table border="1">';
+    let htmlTableClose = '</table></div>';
 
     let sViewElem = "";
 
@@ -83,6 +83,7 @@ function getHtmlMatrixView(oCalculator, sOperation) {
 
 function constructFieldMatrixOperationAndShow(oCalculator) {
 
+    // let aOperations = ["*"];
     let aOperations = ["+", "-", "*", "/"];
     if (oCalculator.type == "p") {
         aOperations.push("^");
@@ -120,7 +121,6 @@ function constructFieldAndCheckCorrect(p, m = NaN) {
             for (let sPolynomView in oIrreduciblePolynomsForSelect) {
                 $('#irreduciblePolynom').append('<option value="' + JSON.stringify(oIrreduciblePolynomsForSelect[sPolynomView]) + '">' + sPolynomView + '</option>');
             }
-            $('#matrix-operation').empty();
             alert('Пожалуйста, выберите один из неприводимых многочленов!');
             $("#irreduciblePolynom").removeClass('d-none');
             return false;
@@ -134,10 +134,28 @@ function constructFieldAndCheckCorrect(p, m = NaN) {
         alert(oCalculator);
     } else {
         sFlagCorrectField = oCalculator.checkTheFieldForComplianceWithAxioms();
-        if (sFlagCorrectField != 'success') {
-            alert(sFlagCorrectField);
-        } else {
-            constructFieldMatrixOperationAndShow(oCalculator);
+
+        switch (sFlagCorrectField) {
+            case "success":
+                constructFieldMatrixOperationAndShow(oCalculator);
+                break;
+            case "error-not-found-mutually-inverse-element-+":
+                alert('Невозможно построить поле с заданными параметрами: отсутствуют противоположные элементы для некоторых элементов поля!');
+                break;
+            case "inconsistency-with-axiom-uniqueness-one-+":
+                alert('Невозможно построить поле с заданными параметрами: нарушена аксиома единственности обратного элемента!');
+                break;
+            case "inconsistency-with-axiom-uniqueness-one-*":
+                alert('Невозможно построить поле с заданными параметрами: нарушена единственность обратного элемента!');
+                break;
+            case "inconsistency-with-axiom-uniqueness-zero-*":
+                alert('Невозможно построить поле с заданными параметрами: нарушена единственность нуля!');
+                break;
+            case "error-not-found-inverse-element-*":
+                alert('Невозможно построить поле с заданными параметрами: отсутствуют обратные элементы для некоторых элементов поля!');
+                break;
+            default:
+                alert('Возникла непредвиденная ошибка: ' + sFlagCorrectField);
         }
     }
 
@@ -202,15 +220,16 @@ $('#generate-btn').click(function() {
             alert('Некорректно введены параметры поля, пожалуйста, повторите попытку!');
             break;
         default:
-            $('#matrix-operation').empty();
-            $('#matrix-operation').append($("<h3 class='mt-50'>Идёт генерация, пожалуйста, подождите.</h3>"))
+
             if ($('input[type=radio][name=type-field]:checked').val() == "gfpm") {
-                if (2 > 3 && m > 3)
+                if (p > 3 && m >= 3) {
                     alert('Генерация поля и построение матриц может занять некоторое время, пожалуйста, подождите!');
+                }
                 constructFieldAndCheckCorrect(p, m);
             } else {
-                if (p > 25)
+                if (p > 101) {
                     alert('Генерация поля и построение матриц может занять некоторое время, пожалуйста, подождите!');
+                }
                 constructFieldAndCheckCorrect(p);
             }
     }

@@ -112,9 +112,9 @@ td:first-child {
 }
 
 #matrix-operation table {
-    width: 70%;
-    margin-left: 15%;
-    margin-right: 15%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 .p-description {
@@ -122,10 +122,6 @@ td:first-child {
     padding-right: 10%;
 }
 
-#matrix-operation {
-    padding-left: 15%;
-    padding-right: 15%;
-}
 
 .navbar-brand {
     margin-right: 1rem;
@@ -134,6 +130,16 @@ td:first-child {
     white-space: nowrap;
 }
 
+.big-table {
+    overflow: auto;
+    position: relative;
+}
+
+.big-table table {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
 
 .form-radio {
     padding-left: 15%;
